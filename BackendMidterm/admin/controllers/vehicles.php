@@ -1,6 +1,10 @@
 <?php
-require_once('../../models/database.php');
-require_once('../models/vehicles_db.php');
+// Load paths relative to project root
+require_once(__DIR__ . '/../../config/paths.php');
+
+// Now use the constants
+require_once(MODELS_PATH . '/database.php');
+require_once(MODELS_PATH . '/vehicles_db.php');
 
 $action = filter_input(INPUT_POST, 'action', FILTER_UNSAFE_RAW);
 if (!$action) {
@@ -15,7 +19,7 @@ $sort = filter_input(INPUT_GET, 'sort', FILTER_UNSAFE_RAW);
 switch ($action) {
     case 'list_vehicles':
         $vehicles = get_all_vehicles($sort);
-        include('vehicles_list.php');
+        include(ADMIN_VIEWS_PATH . '/vehicles_list.php');
         break;
     case 'delete_vehicle':
         $vehicle_id = filter_input(INPUT_POST, 'vehicle_id', FILTER_VALIDATE_INT);
@@ -24,11 +28,11 @@ switch ($action) {
             header('Location: .?action=list_vehicles');
         } else {
             $error = "Missing or incorrect vehicle id.";
-            include('../views/error.php');
+            include(ADMIN_VIEWS_PATH . '/error.php');
         }
         break;
     default:
         $vehicles = get_all_vehicles($sort);
-        include('vehicles_list.php');
+        include(ADMIN_VIEWS_PATH . '/vehicles_list.php');
 }
 ?>
